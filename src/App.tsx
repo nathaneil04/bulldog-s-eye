@@ -134,8 +134,14 @@ export default function App(){
     recognition.onresult=async(e:any)=>{
       const text=String(e.results?.[0]?.[0]?.transcript||'').toLowerCase();
       setNotice(`Voice: “${text}”`);
-      const map:Partial<Record<LayerId,string[]>>={aircraft:['aircraft','planes','flight'],vessels:['vessel','ship','ships','marine'],satellites:['satellite','satellites','orbit'],earthquakes:['earthquake','earthquakes','quake'],traffic:['traffic','roads'],cameras:['camera','cameras','webcam']};
-      for(const [id,words] of Object.entries(map) as [LayerId,string[]][]) if(words.some(w=>text.includes(w))) setEnabled(s=>({...s,[id]:true}));
+const layerKeywords: Partial<Record<LayerId, string[]>> = {
+  aircraft: ['aircraft', 'planes', 'flight'],
+  vessels: ['vessel', 'ship', 'ships', 'marine'],
+  satellites: ['satellite', 'satellites', 'orbit'],
+  earthquakes: ['earthquake', 'earthquakes', 'quake'],
+  traffic: ['traffic', 'roads'],
+  cameras: ['camera', 'cameras', 'webcam'],
+};      for (const [id, words] of Object.entries(layerKeywords) as [LayerId, string[]][]) if(words.some(w=>text.includes(w))) setEnabled(s=>({...s,[id]:true}));
       if(text.includes('pin') && (text.includes('mode')||text.includes('enable'))) {setPinMode(true);setNotice('Pin mode enabled. Click anywhere on the map.');}
       const at=text.split(' at ')[1] || text.split(' to ')[1];
       if(at && at.length>2 && !['aircraft','traffic','satellites'].some(x=>at.includes(x))){ try{ const r=await api.geocode(at); if(r[0]){map.current?.focus(r[0].lat,r[0].lng,12);setNotice(`Focused on ${r[0].displayName}`);} }catch{} }
