@@ -1,0 +1,13 @@
+{
+  "pins": [
+    {
+      "id": "6f3d7468-9a71-4159-9afa-02fffadef7bd",
+      "name": "My place",
+      "description": "",
+      "lat": 15.699968973694652,
+      "lng": 120.60999484510972,
+      "createdAt": "2026-09-20T04:21:03.975Z"
+    }
+  ],
+  "sources": []
+}
