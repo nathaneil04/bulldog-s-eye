@@ -125,9 +125,17 @@ app.get('/api/satellites', async (_req, res) => {
       try {
         const satrec = satellite.twoline2satrec(t.l1, t.l2);
         const pv = satellite.propagate(satrec, now);
-        if (!pv.position || typeof pv.position === 'boolean') return [];
-        const gmst = satellite.gstime(now);
-        const geo = satellite.eciToGeodetic(pv.position, gmst);
+
+if (
+  !pv ||
+  !pv.position ||
+  typeof pv.position === 'boolean'
+) {
+  return [];
+}
+
+const gmst = satellite.gstime(now);
+const geo = satellite.eciToGeodetic(pv.position, gmst);
         return [{
           id: `sat-${idx}-${t.name}`,
           kind: 'satellites', name: t.name,
